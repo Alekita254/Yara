@@ -30,7 +30,7 @@ export const shopLoader = async ({ paramsReceived }) => {
       });
 
       if (response.data && response.data.similar_images_urls) {
-        return { productsData: response.data.similar_images_urls };
+        return { productSimilarData: response.data.similar_images_urls };
       }
     } else {
       const response = await axios.get("http://127.0.0.1:5000/api/products/", {
@@ -97,7 +97,7 @@ const Shop = () => {
             />
           ))}
           {productLoaderData.productSimilarData && productLoaderData.productSimilarData.map((item, index) => (
-            <img key={index} src={item.image_url} alt={`Similar image ${index + 1}`} />
+            <ProductElement key={index} src={item.image_url} alt={`Similar image ${index + 1}`} />
           ))}
         </div>
       </div>
