@@ -30,7 +30,7 @@ export const shopLoader = async ({ paramsReceived }) => {
       });
 
       if (response.data && response.data.similar_images_urls) {
-        return { productSimilarData: response.data.similar_images_urls };
+        return { productSimilarData: response.data.similar_images_urls, productsData: [] }; // Empty productsData
       }
     } else {
       const response = await axios.get("http://127.0.0.1:5000/api/products/", {
@@ -42,8 +42,7 @@ export const shopLoader = async ({ paramsReceived }) => {
       if (response.data.success) {
         return { productsData: response.data.data };
       } else {
-        console.error("API call unsuccessful:", response.data.message);
-        return { productsData: [] }; // Return empty array if API call failed
+        throw new Error("API call unsuccessful:", response.data.message);
       }
     }
   } catch (error) {
@@ -57,12 +56,17 @@ const Shop = () => {
   const productLoaderData = useLoaderData();
   const [paramsReceived, setParamsReceived] = useState({});
 
-  const handleReceivedParams = (paramsData) => {
+  const handleReceivedParams = async (paramsData) => {
     setParamsReceived(paramsData);
   };
 
   useEffect(() => {
-    shopLoader({ paramsReceived: paramsReceived });
+    const fetchData = async () => {
+      const data = await shopLoader({ paramsReceived });
+      setProductLoaderData(data);
+    };
+
+    fetchData();
   }, [paramsReceived]);
 
   if (!productLoaderData || (!productLoaderData.productsData && !productLoaderData.productSimilarData)) {
@@ -97,7 +101,7 @@ const Shop = () => {
             />
           ))}
           {productLoaderData.productSimilarData && productLoaderData.productSimilarData.map((item, index) => (
-            <ProductElement key={index} src={item.image_url} alt={`Similar image ${index + 1}`} />
+            <ProductElement key={index} image={item.image_url} alt={`Similar image ${index + 1}`} title="" rating="" price="" />
           ))}
         </div>
       </div>

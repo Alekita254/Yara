@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Form } from "react-router-dom";
-import { Link } from "react-router-dom";
+// import { Form } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import FormInput from "./FormInput";
+import { Form, Link } from "react-router-dom";
+import FormRange from "./FormRange";
+import FormSelect from "./FormSelect";
+import FormDatePicker from "./FormDatePicker";
+import FormCheckbox from "./FormCheckbox";
+
 
 const userDataString = localStorage.getItem("YaraUser");
 const userData = userDataString ? JSON.parse(userDataString) : {};
@@ -10,6 +17,63 @@ const Filters = ({onParamsSent}) => {
   const [inputs, setInputs] = useState({
     image: null,
   });
+
+  const [selectCategoryList, setSelectCategoryList] = useState([
+    "all",
+    "shoes",
+    "slippers",
+    "heels",
+    "t-shirts",
+    "jackets",
+    "caps",
+    "shorts",
+    "sweaters",
+    "sneakers",
+    "shirts",
+    "boots",
+    "overshirts",
+    "pants",
+    "jeans",
+    "socks",
+    "belts",
+    "trainers",
+  ]);
+  const [selectBrandList, setSelectBrandList] = useState([
+    "all",
+    "WALK LONDON",
+    "Reebok",
+    "Nike",
+    "Jack & Jones",
+    "Crocs",
+    "Vans",
+    "Puma",
+    "New Balance",
+    "Tommy Jeans",
+    "Tommy Hilfiger",
+    "Bershka",
+    "New Look",
+    "AllSaints",
+    "Columbia",
+    "The North Face",
+    "Collusion",
+    "ASOS DESIGN",
+    "Topman",
+    "Dr Denim",
+    "Polo Ralph Lauren",
+    "ASOS Dark Future",
+    "Levi's",
+    "Threadbare",
+    "Calvin Klein",
+    "AAPE BY A BATHING APE®",
+    "Good For Nothing",
+    "Timberland",
+    "Pull and Bear",
+    "Koi Footwear",
+    "adidas performance",
+    "Nike Running",
+    "Dr Martens",
+    "River Island",
+  ]);
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -63,6 +127,62 @@ const Filters = ({onParamsSent}) => {
     onSubmit={handleSubmit}
     >
       {/* SEARCH */}
+      <FormInput
+        type="search"
+        label="search product"
+        name="search"
+        size="input-sm"
+        defaultValue=""
+      />
+      {/* CATEGORIES */}
+      <FormSelect
+        label="select category"
+        name="category"
+        list={selectCategoryList}
+        size="select-sm"
+        defaultValue="all"
+      />
+      {/* COMPANIES */}
+      <FormSelect
+        label="select brand"
+        name="brand"
+        list={selectBrandList}
+        size="select-sm"
+        defaultValue="all"
+      />
+      {/* ORDER */}
+      <FormSelect
+        label="sort by"
+        name="order"
+        list={["asc", "desc", "price high", "price low"]}
+        size="select-sm"
+        defaultValue="a-z"
+      />
+      {/* Producer */}
+      <FormSelect
+        label="Select gender"
+        name="gender"
+        list={["all", "male", "female"]}
+        size="select-sm"
+        defaultValue="all"
+      />
+      {/* PRICE */}
+      <FormRange
+        name="price"
+        label="select price"
+        size="range-sm"
+        price={300}
+      />
+      {/* Date Picker */}
+      <FormDatePicker label="select minimum production date" name="date" />
+
+      {/* In stock */}
+      <FormCheckbox
+        label="Only products in stock"
+        name="stock"
+        defaultValue="false"
+      />
+
       {/* Add more filters as needed */}
       
       {/* IMAGE UPLOAD */}
